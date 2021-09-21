@@ -1,3 +1,4 @@
 bottle.py
 .vscode
 *pycache*
+examples/*/*bottle*

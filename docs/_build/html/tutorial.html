@@ -8,6 +8,7 @@
     <title>Tutorial &#8212; bottle-rest  documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/bootstrap-sphinx.css" />
+    <link rel="stylesheet" type="text/css" href="_static/style.css" />
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
@@ -69,6 +70,7 @@
       aria-labelledby="dLabelLocalToc"><ul>
 <li><a class="reference internal" href="#">Tutorial</a><ul>
 <li><a class="reference internal" href="#installation">Installation</a></li>
+<li><a class="reference internal" href="#quickstart">Quickstart</a></li>
 </ul>
 </li>
 </ul>
@@ -119,6 +121,35 @@
 <p>TODO</p>
 <section id="installation">
 <h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
+<p>Bottle-REST is not dependant on external library other than <a class="reference external" href="https://bottlepy.org/">Bottle</a>. Download
+<a class="reference external" href="https://raw.githubusercontent.com/thepure12/bottle-rest/main/bottle_rest.py">bottle_rest.py</a>
+and <a class="reference external" href="https://bottlepy.org/bottle.py">bottle.py</a> (if you don’t already have it) into your project directory.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ wget https://bottlepy.org/bottle.py
+$ wget https://raw.githubusercontent.com/thepure12/bottle-rest/main/bottle_rest.py
+</pre></div>
+</div>
+</section>
+<section id="quickstart">
+<h2>Quickstart<a class="headerlink" href="#quickstart" title="Permalink to this headline">¶</a></h2>
+<p>Once you have both Bottle and Bottle-REST installed, we can create a basic API.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">bottle</span> <span class="kn">import</span> <span class="n">Bottle</span>
+<span class="kn">from</span> <span class="nn">bottle_rest</span> <span class="kn">import</span> <span class="n">API</span><span class="p">,</span> <span class="n">Resource</span>
+
+<span class="n">app</span> <span class="o">=</span> <span class="n">Bottle</span><span class="p">()</span>
+<span class="n">api</span> <span class="o">=</span> <span class="n">API</span><span class="p">()</span>
+<span class="n">app</span><span class="o">.</span><span class="n">install</span><span class="p">(</span><span class="n">api</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">HelloWorld</span><span class="p">(</span><span class="n">Resource</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;msg&#39;</span><span class="p">:</span> <span class="s1">&#39;hello world&#39;</span><span class="p">}</span>
+
+<span class="n">api</span><span class="o">.</span><span class="n">addResource</span><span class="p">(</span><span class="n">HelloWorld</span><span class="p">,</span> <span class="s1">&#39;/&#39;</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">app</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">debug</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Save this to a file called app.py and run it.</p>
 </section>
 </section>
 

@@ -52,7 +52,7 @@ html_theme_path = sphinx_bootstrap_theme.get_html_theme_path()
 html_theme_options = {
     'navbar_site_name': "Page",
     'navbar_pagenav_name': "Section",
-    'bootswatch_theme': "slate"
+    'bootswatch_theme': "darkly"
 }
 
 # Add any paths that contain custom static files (such as style sheets) here,
@@ -60,3 +60,7 @@ html_theme_options = {
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['_static']
 master_doc = 'index'
+
+html_css_files = [
+    'style.css',
+]
