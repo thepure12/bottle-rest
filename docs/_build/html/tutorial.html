@@ -72,6 +72,9 @@
 <li><a class="reference internal" href="#installation">Installation</a></li>
 <li><a class="reference internal" href="#quickstart">Quickstart</a></li>
 <li><a class="reference internal" href="#routing">Routing</a></li>
+<li><a class="reference internal" href="#endpoints">Endpoints</a></li>
+<li><a class="reference internal" href="#data-validation">Data Validation</a></li>
+<li><a class="reference internal" href="#url-params">URL Params</a></li>
 </ul>
 </li>
 </ul>
@@ -190,14 +193,122 @@ Hit Ctrl-C to quit.
     <span class="n">app</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">debug</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
+<div class="line-block">
+<div class="line"><a class="reference external" href="https://raw.githubusercontent.com/thepure12/bottle-rest/main/examples/routing/app.py">Download</a></div>
+</div>
 <p>Using curl to test:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ curl http://127.0.0.1:8080/food <span class="se">\</span>
 &gt; --header <span class="s2">&quot;Content-Type: application/json&quot;</span> <span class="se">\</span>
 &gt; --data <span class="s1">&#39;{&quot;name&quot;:&quot;carrot&quot;}&#39;</span>
-<span class="o">{</span><span class="s2">&quot;name&quot;</span>:<span class="o">[</span><span class="s2">&quot;carrot&quot;</span>,<span class="s2">&quot;carrot&quot;</span><span class="o">]}</span>
+<span class="o">{</span><span class="s2">&quot;name&quot;</span>: <span class="s2">&quot;carrot&quot;</span><span class="o">]}</span>
+$ curl http://127.0.0.1:8080/food
+<span class="o">{</span><span class="s2">&quot;food&quot;</span>:<span class="o">[</span><span class="s2">&quot;carrot&quot;</span><span class="o">]}</span>
+</pre></div>
+</div>
+</section>
+<section id="endpoints">
+<h2>Endpoints<a class="headerlink" href="#endpoints" title="Permalink to this headline">¶</a></h2>
+<p>TODO</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">api</span><span class="o">.</span><span class="n">addResource</span><span class="p">(</span><span class="n">Food</span><span class="p">,</span> <span class="s2">&quot;/food&quot;</span><span class="p">,</span> <span class="s2">&quot;/foods&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ curl http://127.0.0.1:8080/food
+<span class="o">{</span><span class="s2">&quot;food&quot;</span>:<span class="o">[]}</span>
+$ curl http://127.0.0.1:8080/foods
+<span class="o">{</span><span class="s2">&quot;food&quot;</span>:<span class="o">[]}</span>
+</pre></div>
+</div>
+<p>TODO</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">api</span><span class="o">.</span><span class="n">addResource</span><span class="p">(</span><span class="n">Food</span><span class="p">,</span> <span class="s2">&quot;/food&quot;</span><span class="p">,</span> <span class="s2">&quot;/food/&lt;name&gt;&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ curl http://127.0.0.1:8080/food
+<span class="o">{</span><span class="s2">&quot;food&quot;</span>:<span class="o">[]}</span>
+$ curl http://127.0.0.1:8080/food/carrot
+<span class="o">{</span><span class="s2">&quot;name&quot;</span>: <span class="s2">&quot;carrot&quot;</span><span class="o">}</span>
+</pre></div>
+</div>
+</section>
+<section id="data-validation">
+<h2>Data Validation<a class="headerlink" href="#data-validation" title="Permalink to this headline">¶</a></h2>
+<p>TODO</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">food</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;carrot&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;vegetable&quot;</span><span class="p">}}</span>
+
+<span class="k">class</span> <span class="nc">Food</span><span class="p">(</span><span class="n">Resource</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">name</span> <span class="ow">and</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">food</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">{</span><span class="n">name</span><span class="p">:</span> <span class="n">food</span><span class="p">[</span><span class="n">name</span><span class="p">]}</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;food&quot;</span><span class="p">:</span> <span class="n">food</span><span class="p">}</span>
+
+    <span class="k">def</span> <span class="nf">post</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;junk&quot;</span><span class="p">):</span>
+        <span class="n">food</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="nb">type</span><span class="p">}</span>
+        <span class="k">return</span> <span class="p">{</span><span class="n">name</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="nb">type</span><span class="p">}}</span>
+
+<span class="n">api</span><span class="o">.</span><span class="n">addResource</span><span class="p">(</span><span class="n">Food</span><span class="p">,</span> <span class="s1">&#39;/food&#39;</span><span class="p">,</span> <span class="s1">&#39;/food/&lt;name&gt;&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>TODO</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ curl http://127.0.0.1:8080/food
+<span class="o">{</span><span class="s2">&quot;food&quot;</span>:<span class="o">{</span><span class="s2">&quot;carrot&quot;</span>:<span class="o">{</span><span class="s2">&quot;type&quot;</span>:<span class="s2">&quot;vegetable&quot;</span><span class="o">}}}</span>
+
+<span class="c1"># Get food named carrot</span>
+$ curl http://127.0.0.1:8080/food/carrot
+<span class="o">{</span><span class="s2">&quot;carrot&quot;</span>:<span class="o">{</span><span class="s2">&quot;type&quot;</span>:<span class="s2">&quot;vegetable&quot;</span><span class="o">}}</span>
+
+<span class="c1"># Add food named candy with default type</span>
+$ curl http://127.0.0.1:8080/food <span class="se">\</span>
+&gt; --header <span class="s2">&quot;Content-Type: application/json&quot;</span> <span class="se">\</span>
+&gt; --data <span class="s1">&#39;{&quot;name&quot;:&quot;candy&quot;}&#39;</span>
+<span class="o">{</span><span class="s2">&quot;candy&quot;</span>:<span class="o">{</span><span class="s2">&quot;type&quot;</span>:<span class="s2">&quot;junk&quot;</span><span class="o">}}</span>
+
+<span class="c1"># Add food named apple with type fruit</span>
+$ curl http://127.0.0.1:8080/food <span class="se">\</span>
+&gt; --header <span class="s2">&quot;Content-Type: application/json&quot;</span> <span class="se">\</span>
+&gt; --data <span class="s1">&#39;{&quot;name&quot;:&quot;apple&quot;, &quot;type&quot;: &quot;fruit&quot;}&#39;</span>
+<span class="o">{</span><span class="s2">&quot;apple&quot;</span>:<span class="o">{</span><span class="s2">&quot;type&quot;</span>:<span class="s2">&quot;fruit&quot;</span><span class="o">}}</span>
+
+<span class="c1"># Update carrot type</span>
+$ curl http://127.0.0.1:8080/food/carrot <span class="se">\</span>
+&gt; --header <span class="s2">&quot;Content-Type: application/json&quot;</span> <span class="se">\</span>
+&gt; --data <span class="s1">&#39;{&quot;type&quot;:&quot;veggie&quot;}&#39;</span>
+<span class="o">{</span><span class="s2">&quot;carrot&quot;</span>:<span class="o">{</span><span class="s2">&quot;type&quot;</span>:<span class="s2">&quot;veggie&quot;</span><span class="o">}}</span>
 
 $ curl http://127.0.0.1:8080/food
-<span class="o">{</span><span class="s2">&quot;food&quot;</span>:<span class="o">[</span><span class="s2">&quot;carrot&quot;</span>,<span class="s2">&quot;carrot&quot;</span><span class="o">]}</span>
+<span class="o">{</span>
+    <span class="s2">&quot;food&quot;</span>: <span class="o">{</span>
+        <span class="s2">&quot;carrot&quot;</span>:<span class="o">{</span><span class="s2">&quot;type&quot;</span>:<span class="s2">&quot;veggie&quot;</span><span class="o">}</span>,
+        <span class="s2">&quot;candy&quot;</span>:<span class="o">{</span><span class="s2">&quot;type&quot;</span>:<span class="s2">&quot;junk&quot;</span><span class="o">}</span>,
+        <span class="s2">&quot;apple&quot;</span>:<span class="o">{</span><span class="s2">&quot;type&quot;</span>:<span class="s2">&quot;fruit&quot;</span><span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</pre></div>
+</div>
+</section>
+<section id="url-params">
+<h2>URL Params<a class="headerlink" href="#url-params" title="Permalink to this headline">¶</a></h2>
+<p>TODO</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">food</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;carrot&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;vegetable&quot;</span><span class="p">},</span>
+    <span class="s2">&quot;squash&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;vegetable&quot;</span><span class="p">},</span>
+    <span class="s2">&quot;apple&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;fruit&quot;</span><span class="p">},</span>
+    <span class="s2">&quot;orange&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;fruit&quot;</span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">class</span> <span class="nc">Food</span><span class="p">(</span><span class="n">Resource</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="s2">&quot;type&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">:</span>
+            <span class="nb">type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span>
+            <span class="k">return</span> <span class="p">{</span><span class="n">n</span><span class="p">:</span> <span class="n">f</span> <span class="k">for</span> <span class="n">n</span><span class="p">,</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">food</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">f</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="nb">type</span><span class="p">}</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;food&quot;</span><span class="p">:</span> <span class="n">food</span><span class="p">}</span>
+
+<span class="n">api</span><span class="o">.</span><span class="n">addResource</span><span class="p">(</span><span class="n">Food</span><span class="p">,</span> <span class="s1">&#39;/food&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>TODO</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ curl http://127.0.0.1:8080/food
+<span class="o">{</span><span class="s2">&quot;food&quot;</span>:<span class="o">{</span><span class="s2">&quot;carrot&quot;</span>:<span class="o">{</span><span class="s2">&quot;type&quot;</span>:<span class="s2">&quot;vegetable&quot;</span><span class="o">}</span>,<span class="s2">&quot;squash&quot;</span>:<span class="o">{</span><span class="s2">&quot;type&quot;</span>:<span class="s2">&quot;vegetable&quot;</span><span class="o">}</span>,<span class="s2">&quot;apple&quot;</span>:<span class="o">{</span><span class="s2">&quot;type&quot;</span>:<span class="s2">&quot;fruit&quot;</span><span class="o">}</span>,<span class="s2">&quot;orange&quot;</span>:<span class="o">{</span><span class="s2">&quot;type&quot;</span>:<span class="s2">&quot;fruit&quot;</span><span class="o">}}}</span>
+$ curl http://127.0.0.1:8080/food?type<span class="o">=</span>fruit
+<span class="o">{</span><span class="s2">&quot;apple&quot;</span>:<span class="o">{</span><span class="s2">&quot;type&quot;</span>:<span class="s2">&quot;fruit&quot;</span><span class="o">}</span>,<span class="s2">&quot;orange&quot;</span>:<span class="o">{</span><span class="s2">&quot;type&quot;</span>:<span class="s2">&quot;fruit&quot;</span><span class="o">}}</span>
 </pre></div>
 </div>
 </section>
