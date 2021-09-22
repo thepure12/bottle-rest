@@ -53,9 +53,10 @@ Using curl to test:
     $ curl http://127.0.0.1:8080/
     {"msg":"hello world"}
 
-Routing
--------
-TODO
+HTTP Methods
+------------
+Bottle-REST is built on Bottle's request routing. Each resources gives you access
+to the get(), post(), put(), delete() decorators by defining the methods in your resource.
 
 .. code-block:: python
 
@@ -81,14 +82,14 @@ TODO
     if __name__ == '__main__':
         app.run(debug=True)
 
-| `Download <https://raw.githubusercontent.com/thepure12/bottle-rest/main/examples/routing/app.py>`_
+| `Raw <https://raw.githubusercontent.com/thepure12/bottle-rest/main/examples/routing/app.py>`_
 
 Using curl to test:
 
 .. code-block:: bash
 
     $ curl http://127.0.0.1:8080/food \
-    > --header "Content-Type: application/json" \
+    > --header "Content-group: application/json" \
     > --data '{"name":"carrot"}'
     {"name": "carrot"]}
     $ curl http://127.0.0.1:8080/food
@@ -96,7 +97,8 @@ Using curl to test:
 
 Endpoints
 ---------
-TODO
+Resources can also handle multiple URLs. Pass multiple URLs into the addResource() method and
+each will be routed to your resource.
 
 .. code-block:: python
 
@@ -109,16 +111,22 @@ TODO
     $ curl http://127.0.0.1:8080/foods
     {"food":[]}
 
-TODO
+Resources also handle Bottle's dynamic routes. These are routes that contain *wildcards*, where a wildcard  is:
+"name enclosed in angle brackets (e.g. ``<name>``) and accepts one or more characters up to the next slash (/)".
+Each wildcard is passed in as a keyword argument to the Resource method that the request routes to.
+
+| See Bottle's `Dynamic Routes <https://bottlepy.org/docs/dev/tutorial.html#dynamic-routes>`_ 
 
 .. code-block:: python
+
+    class Food(Resource):
+        def get(self, name):
+            return {"food": name}
 
     api.addResource(Food, "/food", "/food/<name>")
 
 .. code-block:: bash
     
-    $ curl http://127.0.0.1:8080/food
-    {"food":[]}
     $ curl http://127.0.0.1:8080/food/carrot
     {"name": "carrot"}
     
@@ -128,7 +136,7 @@ TODO
 
 .. code-block:: python
 
-    food = {"carrot": {"type": "vegetable"}}
+    food = {"carrot": {"group": "vegetable"}}
 
     class Food(Resource):
         def get(self, name=None):
@@ -136,9 +144,9 @@ TODO
                 return {name: food[name]}
             return {"food": food}
 
-        def post(self, name, type="junk"):
-            food[name] = {"type": type}
-            return {name: {"type": type}}
+        def post(self, name, group="junk"):
+            food[name] = {"group": group}
+            return {name: {"group": group}}
 
     api.addResource(Food, '/food', '/food/<name>')
 
@@ -147,36 +155,42 @@ TODO
 .. code-block:: bash
 
     $ curl http://127.0.0.1:8080/food
-    {"food":{"carrot":{"type":"vegetable"}}}
+    {"food":{"carrot":{"group":"vegetable"}}}
 
     # Get food named carrot
     $ curl http://127.0.0.1:8080/food/carrot 
-    {"carrot":{"type":"vegetable"}}
+    {"carrot":{"group":"vegetable"}}
 
-    # Add food named candy with default type
+    # Add food named candy with default group
     $ curl http://127.0.0.1:8080/food \
-    > --header "Content-Type: application/json" \
+    > --header "Content-group: application/json" \
     > --data '{"name":"candy"}'
-    {"candy":{"type":"junk"}}
+    {"candy":{"group":"junk"}}
 
-    # Add food named apple with type fruit
+    # Add food named apple with group fruit
+    $ curl http://127.0.0.1:8080/food \
+    > --header "Content-group: application/json" \
+    > --data '{"name":"apple", "group": "fruit"}'
+    {"apple":{"group":"fruit"}}
+
+    # Add food without a name
     $ curl http://127.0.0.1:8080/food \
     > --header "Content-Type: application/json" \
-    > --data '{"name":"apple", "type": "fruit"}'
-    {"apple":{"type":"fruit"}}
+    > --data '{"group":"fruit"}'
+    {"name":"This feild is is required"}
 
-    # Update carrot type
+    # Update carrot group
     $ curl http://127.0.0.1:8080/food/carrot \
-    > --header "Content-Type: application/json" \
-    > --data '{"type":"veggie"}'
-    {"carrot":{"type":"veggie"}}
+    > --header "Content-group: application/json" \
+    > --data '{"group":"veggie"}'
+    {"carrot":{"group":"veggie"}}
 
     $ curl http://127.0.0.1:8080/food
     {
         "food": {
-            "carrot":{"type":"veggie"},
-            "candy":{"type":"junk"},
-            "apple":{"type":"fruit"}
+            "carrot":{"group":"veggie"},
+            "candy":{"group":"junk"},
+            "apple":{"group":"fruit"}
         }
     }
 
@@ -187,17 +201,17 @@ TODO
 .. code-block:: python
 
     food = {
-        "carrot": {"type": "vegetable"},
-        "squash": {"type": "vegetable"},
-        "apple": {"type": "fruit"},
-        "orange": {"type": "fruit"}
+        "carrot": {"group": "vegetable"},
+        "squash": {"group": "vegetable"},
+        "apple": {"group": "fruit"},
+        "orange": {"group": "fruit"}
     }
 
     class Food(Resource):
         def get(self):
-            if "type" in self.params:
-                type = self.params["type"]
-                return {n: f for n, f in food.items() if f["type"] == type}
+            if "group" in self.params:
+                group = self.params["group"]
+                return {n: f for n, f in food.items() if f["group"] == group}
             return {"food": food}
 
     api.addResource(Food, '/food')
@@ -207,6 +221,6 @@ TODO
 .. code-block:: bash
 
     $ curl http://127.0.0.1:8080/food
-    {"food":{"carrot":{"type":"vegetable"},"squash":{"type":"vegetable"},"apple":{"type":"fruit"},"orange":{"type":"fruit"}}}
-    $ curl http://127.0.0.1:8080/food?type=fruit
-    {"apple":{"type":"fruit"},"orange":{"type":"fruit"}}
+    {"food":{"carrot":{"group":"vegetable"},"squash":{"group":"vegetable"},"apple":{"group":"fruit"},"orange":{"group":"fruit"}}}
+    $ curl http://127.0.0.1:8080/food?group=fruit
+    {"apple":{"group":"fruit"},"orange":{"group":"fruit"}}

@@ -5,7 +5,7 @@ app = Bottle()
 api = API()
 app.install(api)
 
-food = {"carrot": {"type": "vegetable"}}
+food = {"carrot": {"group": "vegetable"}}
 
 class Food(Resource):
     def get(self, name=None):
@@ -13,9 +13,9 @@ class Food(Resource):
             return {name: food[name]}
         return {"food": food}
 
-    def post(self, name, type="junk"):
-        food[name] = {"type": type}
-        return {name: {"type": type}}
+    def post(self, name, group="junk"):
+        food[name] = {"group": group}
+        return {name: {"group": group}}
 
 api.addResource(Food, '/food', '/food/<name>')
 

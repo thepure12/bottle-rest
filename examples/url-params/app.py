@@ -6,17 +6,17 @@ api = API()
 app.install(api)
 
 food = {
-    "carrot": {"type": "vegetable"},
-    "squash": {"type": "vegetable"},
-    "apple": {"type": "fruit"},
-    "orange": {"type": "fruit"}
+    "carrot": {"group": "vegetable"},
+    "squash": {"group": "vegetable"},
+    "apple": {"group": "fruit"},
+    "orange": {"group": "fruit"}
 }
 
 class Food(Resource):
     def get(self):
-        if "type" in self.params:
-            type = self.params["type"]
-            return {n: f for n, f in food.items() if f["type"] == type}
+        if "group" in self.params:
+            group = self.params["group"]
+            return {n: f for n, f in food.items() if f["group"] == group}
         return {"food": food}
 
 api.addResource(Food, '/food')
