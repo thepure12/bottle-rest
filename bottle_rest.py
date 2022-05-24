@@ -1,15 +1,26 @@
+from enum import Enum
 from typing import Type
-from bottle import PluginError, Route, Bottle, abort, request, response
+from bottle import PluginError, Route, Bottle, request, response
 from inspect import signature
 
 class Resource(object):
+
+    class Methods(Enum):
+        GET = "GET"
+        POST = "POST"
+        PUT = "PUT"
+        DELETE = "DELETE"
+        OPTIONS = "OPTIONS"
 
     @property
     def params(self):
         return request.params
 
-    def getMethod(self, method: str):
-       return getattr(self, method.lower(), None)
+    def getFunction(self, method: str):
+        return getattr(self, method.lower(), None)
+
+    def getRouteConfig(self, method: str):
+        return getattr(self, method.upper(), {})
 
 
 class API(object):
@@ -54,7 +65,11 @@ class API(object):
             if self.debug:
                 (f"Adding rescource '{rule}'")
             resource = resource_cls()
-            for verb in ["GET", "POST", "PUT", "DELETE"]:
-                meth = resource.getMethod(verb)
-                if meth:
-                    self.app.route(rule, verb, meth)
+            for method in resource.Methods:
+                method = method.value
+                func = resource.getFunction(method)
+                cfg = resource.getRouteConfig(method)
+                if func:
+                    if self.debug:
+                        print(f"Creating route {method} {rule} for method {func}")
+                    self.app.route(rule, method, func, **cfg)
