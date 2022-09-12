@@ -1,6 +1,6 @@
 from enum import Enum
 from typing import Type
-from bottle import PluginError, Route, Bottle, request, response
+from bottle import PluginError, Route, Bottle, abort, request, response
 from inspect import signature
 
 class Resource(object):
@@ -16,12 +16,16 @@ class Resource(object):
     def params(self):
         return request.params
 
-    def getFunction(self, method: str):
-        return getattr(self, method.lower(), None)
+    def getFunction(self, method: Methods):
+        return getattr(self, method.value.lower(), None)
 
-    def getRouteConfig(self, method: str):
-        return getattr(self, method.upper(), {})
+    @classmethod
+    def getRouteConfig(cls, method: Methods) -> dict:
+        return getattr(cls, method.value.upper(), {})
 
+    @classmethod
+    def setRouteConfig(cls, method: Methods, cfg: dict) -> None:
+        setattr(cls, method.value.upper(), cfg)
 
 class API(object):
     name = 'bottle-rest'
@@ -44,10 +48,11 @@ class API(object):
         def _wrapper(*args, **kwargs):
             params = signature(callback).parameters
             if self.debug:
-                print(f"args: {args}")
-                print(f"kwargs: {kwargs}")
-                print(f"url params: {list(request.params.items())}")
-                print(f"method params: {params}")
+                print(f"\033[96mbottle_rest:\033[0m path: {request.path}")
+                print(f"\033[96mbottle_rest:\033[0m args: {args}")
+                print(f"\033[96mbottle_rest:\033[0m kwargs: {kwargs}")
+                print(f"\033[96mbottle_rest:\033[0m url params: {list(request.params.items())}")
+                print(f"\033[96mbottle_rest:\033[0m method params: {params}")
             if params:
                 data = request.json
                 if not data:
@@ -65,11 +70,11 @@ class API(object):
             if self.debug:
                 (f"Adding rescource '{rule}'")
             resource = resource_cls()
+            setattr(self, resource_cls.__name__, resource)
             for method in resource.Methods:
-                method = method.value
                 func = resource.getFunction(method)
                 cfg = resource.getRouteConfig(method)
                 if func:
                     if self.debug:
-                        print(f"Creating route {method} {rule} for method {func}")
-                    self.app.route(rule, method, func, **cfg)
+                        print(f"\033[96mbottle_rest:\033[0m Creating route {method.value} {rule} for method {func}")
+                    self.app.route(rule, method.value, func, **cfg)
