@@ -1,6 +1,6 @@
 from enum import Enum
 from typing import Type, Union
-from ..bottle import PluginError, Route, Bottle, abort, request, response
+from bottle import PluginError, Route, Bottle, abort, request, response
 from inspect import signature
 
 

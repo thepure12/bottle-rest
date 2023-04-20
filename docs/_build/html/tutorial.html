@@ -122,10 +122,10 @@
       
   <section id="tutorial">
 <h1>Tutorial<a class="headerlink" href="#tutorial" title="Permalink to this headline">¶</a></h1>
-<p>TODO</p>
+<p class="linemarker linemarker-4">TODO</p>
 <section id="installation">
 <h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
-<p>Bottle-REST is not dependant on external library other than <a class="reference external" href="https://bottlepy.org/">Bottle</a>. Download
+<p class="linemarker linemarker-8">Bottle-REST is not dependant on external library other than <a class="reference external" href="https://bottlepy.org/">Bottle</a>. Download
 <a class="reference external" href="https://raw.githubusercontent.com/thepure12/bottle-rest/main/bottle_rest.py">bottle_rest.py</a>
 and <a class="reference external" href="https://bottlepy.org/bottle.py">bottle.py</a> (if you don’t already have it) into your project directory.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ wget https://bottlepy.org/bottle.py
@@ -135,7 +135,7 @@ $ wget https://raw.githubusercontent.com/thepure12/bottle-rest/main/bottle_rest.
 </section>
 <section id="quickstart">
 <h2>Quickstart<a class="headerlink" href="#quickstart" title="Permalink to this headline">¶</a></h2>
-<p>Once you have both Bottle and Bottle-REST installed, we can create a basic API.</p>
+<p class="linemarker linemarker-19">Once you have both Bottle and Bottle-REST installed, we can create a basic API.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">bottle</span> <span class="kn">import</span> <span class="n">Bottle</span>
 <span class="kn">from</span> <span class="nn">bottle_rest</span> <span class="kn">import</span> <span class="n">API</span><span class="p">,</span> <span class="n">Resource</span>
 
@@ -153,7 +153,7 @@ $ wget https://raw.githubusercontent.com/thepure12/bottle-rest/main/bottle_rest.
     <span class="n">app</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">debug</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Save this to a file called app.py (or
+<p class="linemarker linemarker-39">Save this to a file called app.py (or
 <a class="reference external" href="https://raw.githubusercontent.com/thepure12/bottle-rest/main/examples/hello-world/app.py">download</a> it) and run it.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ python app.py
 Bottle v0.13-dev server starting up (using WSGIRefServer())...
@@ -161,7 +161,7 @@ Listening on http://127.0.0.1:8080/
 Hit Ctrl-C to quit.
 </pre></div>
 </div>
-<p>Using curl to test:</p>
+<p class="linemarker linemarker-49">Using curl to test:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ curl http://127.0.0.1:8080/
 <span class="o">{</span><span class="s2">&quot;msg&quot;</span>:<span class="s2">&quot;hello world&quot;</span><span class="o">}</span>
 </pre></div>
@@ -169,7 +169,7 @@ Hit Ctrl-C to quit.
 </section>
 <section id="http-methods">
 <h2>HTTP Methods<a class="headerlink" href="#http-methods" title="Permalink to this headline">¶</a></h2>
-<p>Bottle-REST is built on Bottle’s request routing. Each resources gives you access
+<p class="linemarker linemarker-58">Bottle-REST is built on Bottle’s request routing. Each resources gives you access
 to the get(), post(), put(), delete() decorators by defining the methods in your resource.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">bottle</span> <span class="kn">import</span> <span class="n">Bottle</span>
 <span class="kn">from</span> <span class="nn">bottle_rest</span> <span class="kn">import</span> <span class="n">API</span><span class="p">,</span> <span class="n">Resource</span>
@@ -197,7 +197,7 @@ to the get(), post(), put(), delete() decorators by defining the methods in your
 <div class="line-block">
 <div class="line"><a class="reference external" href="https://raw.githubusercontent.com/thepure12/bottle-rest/main/examples/routing/app.py">Raw</a></div>
 </div>
-<p>Using curl to test:</p>
+<p class="linemarker linemarker-87">Using curl to test:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ curl http://127.0.0.1:8080/food <span class="se">\</span>
 &gt; --header <span class="s2">&quot;Content-group: application/json&quot;</span> <span class="se">\</span>
 &gt; --data <span class="s1">&#39;{&quot;name&quot;:&quot;carrot&quot;}&#39;</span>
@@ -209,7 +209,7 @@ $ curl http://127.0.0.1:8080/food
 </section>
 <section id="endpoints">
 <h2>Endpoints<a class="headerlink" href="#endpoints" title="Permalink to this headline">¶</a></h2>
-<p>Resources can also handle multiple URLs. Pass multiple URLs into the addResource() method and
+<p class="linemarker linemarker-100">Resources can also handle multiple URLs. Pass multiple URLs into the addResource() method and
 each will be routed to your resource.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">api</span><span class="o">.</span><span class="n">addResource</span><span class="p">(</span><span class="n">Food</span><span class="p">,</span> <span class="s2">&quot;/food&quot;</span><span class="p">,</span> <span class="s2">&quot;/foods&quot;</span><span class="p">)</span>
 </pre></div>
@@ -220,7 +220,7 @@ $ curl http://127.0.0.1:8080/foods
 <span class="o">{</span><span class="s2">&quot;food&quot;</span>:<span class="o">[]}</span>
 </pre></div>
 </div>
-<p>Resources also handle Bottle’s dynamic routes. These are routes that contain <em>wildcards</em>, where a wildcard  is:
+<p class="linemarker linemarker-114">Resources also handle Bottle’s dynamic routes. These are routes that contain <em>wildcards</em>, where a wildcard  is:
 “name enclosed in angle brackets (e.g. <code class="docutils literal notranslate"><span class="pre">&lt;name&gt;</span></code>) and accepts one or more characters up to the next slash (/)”.
 Each wildcard is passed in as a keyword argument to the Resource method that the request routes to.</p>
 <div class="line-block">
@@ -240,7 +240,7 @@ Each wildcard is passed in as a keyword argument to the Resource method that the
 </section>
 <section id="data-validation">
 <h2>Data Validation<a class="headerlink" href="#data-validation" title="Permalink to this headline">¶</a></h2>
-<p>TODO</p>
+<p class="linemarker linemarker-135">TODO</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">food</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;carrot&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;group&quot;</span><span class="p">:</span> <span class="s2">&quot;vegetable&quot;</span><span class="p">}}</span>
 
 <span class="k">class</span> <span class="nc">Food</span><span class="p">(</span><span class="n">Resource</span><span class="p">):</span>
@@ -256,7 +256,7 @@ Each wildcard is passed in as a keyword argument to the Resource method that the
 <span class="n">api</span><span class="o">.</span><span class="n">addResource</span><span class="p">(</span><span class="n">Food</span><span class="p">,</span> <span class="s1">&#39;/food&#39;</span><span class="p">,</span> <span class="s1">&#39;/food/&lt;name&gt;&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>TODO</p>
+<p class="linemarker linemarker-153">TODO</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ curl http://127.0.0.1:8080/food
 <span class="o">{</span><span class="s2">&quot;food&quot;</span>:<span class="o">{</span><span class="s2">&quot;carrot&quot;</span>:<span class="o">{</span><span class="s2">&quot;group&quot;</span>:<span class="s2">&quot;vegetable&quot;</span><span class="o">}}}</span>
 
@@ -301,7 +301,7 @@ $ curl http://127.0.0.1:8080/food
 </section>
 <section id="url-params">
 <h2>URL Params<a class="headerlink" href="#url-params" title="Permalink to this headline">¶</a></h2>
-<p>TODO</p>
+<p class="linemarker linemarker-199">TODO</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">food</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s2">&quot;carrot&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;group&quot;</span><span class="p">:</span> <span class="s2">&quot;vegetable&quot;</span><span class="p">},</span>
     <span class="s2">&quot;squash&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;group&quot;</span><span class="p">:</span> <span class="s2">&quot;vegetable&quot;</span><span class="p">},</span>
@@ -319,7 +319,7 @@ $ curl http://127.0.0.1:8080/food
 <span class="n">api</span><span class="o">.</span><span class="n">addResource</span><span class="p">(</span><span class="n">Food</span><span class="p">,</span> <span class="s1">&#39;/food&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>TODO</p>
+<p class="linemarker linemarker-219">TODO</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ curl http://127.0.0.1:8080/food
 <span class="o">{</span><span class="s2">&quot;food&quot;</span>:<span class="o">{</span><span class="s2">&quot;carrot&quot;</span>:<span class="o">{</span><span class="s2">&quot;group&quot;</span>:<span class="s2">&quot;vegetable&quot;</span><span class="o">}</span>,<span class="s2">&quot;squash&quot;</span>:<span class="o">{</span><span class="s2">&quot;group&quot;</span>:<span class="s2">&quot;vegetable&quot;</span><span class="o">}</span>,<span class="s2">&quot;apple&quot;</span>:<span class="o">{</span><span class="s2">&quot;group&quot;</span>:<span class="s2">&quot;fruit&quot;</span><span class="o">}</span>,<span class="s2">&quot;orange&quot;</span>:<span class="o">{</span><span class="s2">&quot;group&quot;</span>:<span class="s2">&quot;fruit&quot;</span><span class="o">}}}</span>
 $ curl http://127.0.0.1:8080/food?group<span class="o">=</span>fruit
