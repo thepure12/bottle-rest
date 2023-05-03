@@ -1,6 +1,6 @@
 import unittest
 from bottle import Bottle, debug
-from bottle_rest import API, Resource
+from src.bottle_rest import API, Resource
 from webtest import TestApp, TestResponse
 
 DEBUG = False

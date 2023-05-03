@@ -3,13 +3,15 @@ bottle.py
 *pycache*
 examples/*/*bottle*
 /app.py
+dist/
+build/
 bottle_rest.egg-info
 docs/_build
 *.pyc
 *.swp
 *.egg
 env/
-.venv/
+venv/
 .eggs/
 .tox/
 .pytest_cache/
